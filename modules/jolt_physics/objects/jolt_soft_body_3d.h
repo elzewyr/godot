@@ -65,6 +65,7 @@ class JoltSoftBody3D final : public JoltObject3D {
 	float pressure = 0.0f;
 	float linear_damping = 0.01f;
 	float stiffness_coefficient = 0.5f;
+	float shrinking_factor = 1.0f;
 
 	int simulation_precision = 5;
 
@@ -138,6 +139,9 @@ public:
 
 	float get_stiffness_coefficient() const;
 	void set_stiffness_coefficient(float p_coefficient);
+
+	float get_shrinking_factor() const;
+	void set_shrinking_factor(float p_shrinking_factor);
 
 	float get_pressure() const { return pressure; }
 	void set_pressure(float p_pressure);

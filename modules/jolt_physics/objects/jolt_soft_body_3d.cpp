@@ -205,6 +205,11 @@ bool JoltSoftBody3D::_ref_shared_data() {
 		vertex_attrib.mCompliance = vertex_attrib.mShearCompliance = inverse_stiffness;
 
 		settings.CreateConstraints(&vertex_attrib, 1, JPH::SoftBodySharedSettings::EBendType::None);
+		if (shrinking_factor < 1) {
+			for (JPH::SoftBodySharedSettings::Edge &e : settings.mEdgeConstraints) {
+					e.mRestLength *= shrinking_factor;
+			}
+		}
 		settings.Optimize();
 	} else {
 		iter_shared_data->value.ref_count++;
@@ -486,6 +491,14 @@ float JoltSoftBody3D::get_stiffness_coefficient() const {
 
 void JoltSoftBody3D::set_stiffness_coefficient(float p_coefficient) {
 	stiffness_coefficient = CLAMP(p_coefficient, 0.0f, 1.0f);
+}
+
+float JoltSoftBody3D::get_shrinking_factor() const {
+	return shrinking_factor;
+}
+
+void JoltSoftBody3D::set_shrinking_factor(float p_shrinking_factor) {
+	shrinking_factor = CLAMP(p_shrinking_factor, 0.0f, 1.0f);
 }
 
 void JoltSoftBody3D::set_pressure(float p_pressure) {
