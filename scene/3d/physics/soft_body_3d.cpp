@@ -273,12 +273,17 @@ void SoftBody3D::_notification(int p_what) {
 			RID space = get_world_3d()->get_space();
 			PhysicsServer3D::get_singleton()->soft_body_set_space(physics_rid, space);
 			_prepare_physics_server();
+			set_physics_process_internal(true);
 		} break;
 
 		case NOTIFICATION_READY: {
 			if (!parent_collision_ignore.is_empty()) {
 				add_collision_exception_with(get_node(parent_collision_ignore));
 			}
+		} break;
+
+		case NOTIFICATION_INTERNAL_PHYSICS_PROCESS: {
+			_update_physics_server();
 		} break;
 
 		case NOTIFICATION_TRANSFORM_CHANGED: {
@@ -302,6 +307,7 @@ void SoftBody3D::_notification(int p_what) {
 
 		case NOTIFICATION_EXIT_WORLD: {
 			PhysicsServer3D::get_singleton()->soft_body_set_space(physics_rid, RID());
+			set_physics_process_internal(false);
 		} break;
 
 		case NOTIFICATION_DISABLED: {
